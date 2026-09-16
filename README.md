@@ -1,75 +1,104 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🚀 VestTrack
 
-Currently, two official plugins are available:
+### A modern study management platform built for ambitious students.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Organize subjects, track tasks, manage mock exams, and visualize academic progress in one place.
 
-## React Compiler
+![React](https://img.shields.io/badge/React-20232A?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?logo=tailwindcss)
+![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+</div>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📖 About
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+VestTrack is a productivity platform designed to help students transform scattered study routines into measurable progress.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Instead of relying on notebooks and multiple apps, VestTrack centralizes subjects, tasks, mock exams, study statistics, and weekly goals inside a single intuitive dashboard.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+This project is being developed from scratch using modern frontend technologies as both a real product and a software engineering portfolio.
 
+---
+
+## ✨ Current Features
+
+- 📚 Subject management
+- 📝 Mock exam tracking
+- ✅ Task organization
+- 📊 Weekly progress dashboard
+- 🎯 Reusable React components
+- 📱 Responsive interface
+
+---
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| React | UI |
+| TypeScript | Type safety |
+| Vite | Development environment |
+| Tailwind CSS | Styling |
+| shadcn/ui | UI components |
+| Lucide React | Icons |
+| React Router | Navigation |
+
+---
+
+## 🗂 Project Structure
+
+```text
+src/
+│
+├── components/
+│   ├── ui/
+│   ├── layout/
+│
+├── pages/
+│   ├── Dashboard
+│   ├── Subjects
+│   ├── MockTests
+│   └── Profile
+│
+├── routes/
+└── assets/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚧 Roadmap
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- [x] Dashboard layout
+- [x] Sidebar navigation
+- [x] Reusable StatCard
+- [x] SubjectCard component
+- [ ] Subject details page
+- [ ] Charts & analytics
+- [ ] Calendar integration
+- [ ] Authentication
+- [ ] Database integration
 
+---
+
+## ⚙ Running locally
+
+```bash
+npm install
+npm run dev
 ```
+
+---
+
+## 👨‍💻 Developer
+
+**Leonardo Pereira Silva**
+
+Software Engineering & Computer Science applicant passionate about education, technology, and product design.
+
+> Building projects that solve real problems while continuously improving my engineering skills.
