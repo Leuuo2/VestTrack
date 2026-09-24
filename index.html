@@ -1,12 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vesttrack</title>
+    <meta
+      name="description"
+      content="VestTrack — o painel que transforma sua rotina de estudos em progresso. Matérias, tópicos, tarefas e simulados em um só lugar. Grátis, funciona sem cadastro e sincroniza na nuvem com conta opcional."
+    />
+    <title>VestTrack — Organize seus estudos</title>
   </head>
   <body>
+    <script>
+      // Aplica o tema antes do React montar (evita "flash" de tema errado)
+      try {
+        var t = localStorage.getItem("vesttrack:theme");
+        if (
+          t === "dark" ||
+          (!t && matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

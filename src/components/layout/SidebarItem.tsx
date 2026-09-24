@@ -5,25 +5,20 @@ type SidebarItemProps = {
   text: string;
   to: string;
   icon: LucideIcon;
-  onClick: ()=> void;
+  onClick: () => void;
 };
 
-function SidebarItem({
-  text,
-  to,
-  icon: Icon,
-  onClick,
-}: SidebarItemProps) {
+function SidebarItem({ text, to, icon: Icon, onClick }: SidebarItemProps) {
   return (
     <NavLink
       to={to}
-      end={to === "/"}
+      end={to === "/app"}
       onClick={onClick}
       className={({ isActive }) =>
-        `flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
+        `flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
           isActive
-            ? "bg-blue-600 text-white"
-            : "text-slate-700 hover:bg-slate-200"
+            ? "bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground"
         }`
       }
     >
