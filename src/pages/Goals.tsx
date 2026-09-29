@@ -173,7 +173,7 @@ export default function Goals() {
 }
 
 function GoalCard({ goal, onComplete, onRemove }: { goal: Goal; onComplete: (id: string) => void; onRemove: (id: string) => void }) {
-  const progress = Math.min((goal.current / goal.target) * 100, 100);
+  const progress = goal.target > 0 ? Math.min((goal.current / goal.target) * 100, 100) : 0;
   const isDone = goal.current >= goal.target;
   const Icon = goal.type === "questions" ? Brain : goal.type === "topics" ? BookOpen : goal.type === "flashcards" ? Layers : goal.type === "focus" ? Timer : Target;
 

@@ -28,7 +28,7 @@ function Subjects() {
             title={subject.name}
             icon={subject.icon}
             accent={subject.accent}
-            tasks={loadTasks(subject.id, DEFAULT_TASKS[subject.id] ?? []).filter(t => !t.done).length}
+            tasks={(() => { try { return loadTasks(subject.id, DEFAULT_TASKS[subject.id] ?? []).filter(t => !t.done).length; } catch { return 0; } })()}
             mockTests={loadMockTests().filter(t => t.scores[subject.id] != null).length}
             progress={subject.progress}
           />

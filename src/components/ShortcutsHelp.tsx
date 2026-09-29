@@ -18,7 +18,7 @@ export default function ShortcutsHelp() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [open]);
 
-  if (!open) {
+  if (typeof window === "undefined" || !open) {
     return (
       <button
         onClick={() => setOpen(true)}

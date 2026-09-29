@@ -12,7 +12,7 @@ export default function Analytics() {
 
   if (!data) return <div className="p-6 text-sm text-muted-foreground">Carregando analytics...</div>;
 
-  const maxHeat = Math.max(...data.heatmap.map(h => h.count), 1);
+  const maxHeat = Math.max(...data.heatmap.map(h => h.count), 1) || 1;
 
   return (
     <div className="space-y-6">

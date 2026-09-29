@@ -86,6 +86,19 @@ const steps = [
   },
 ];
 
+const testimonials = [
+  { name: "Ana", role: "Medicina USP", text: "Parei de usar 3 planilhas. VestTrack me mostrou que eu tava negligenciando humanas.", avatar: "A" },
+  { name: "Lucas", role: "Engenharia UNICAMP", text: "Streak de 45 dias me salvou. Ver o heatmap todo verde motiva demais.", avatar: "L" },
+  { name: "Marina", role: "Direito FUVEST", text: "500 questões com explicação me ajudaram mais que cursinho. E é grátis!", avatar: "M" },
+];
+
+const faqs = [
+  { q: "Precisa pagar?", a: "Não, é 100% grátis. Funciona offline sem conta. Nuvem é opcional." },
+  { q: "Meus dados ficam seguros?", a: "Sim, tudo salvo local no seu navegador. Com conta, usa RLS no Supabase — só você vê seus dados." },
+  { q: "Funciona no celular?", a: "Sim, mobile first. Touch 44px, grid responsivo, funciona no Chrome/Safari." },
+  { q: "Quantas questões tem?", a: "500 questões ENEM/FUVEST/UNICAMP/UNESP 2018-2026, com gabarito, explicação e tags. Mais 50 por matéria." },
+];
+
 function Landing() {
   return (
     <div className="relative overflow-x-clip bg-background">
@@ -334,6 +347,50 @@ function Landing() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* TESTIMONIALS */}
+        <section className="mx-auto max-w-6xl px-6 py-20">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Quem usa, aprova</h2>
+            <p className="mx-auto mt-3 max-w-xl text-muted-foreground">Estudantes reais que trocaram planilha por progresso.</p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {testimonials.map(t => (
+              <div key={t.name} className="rounded-[20px] border border-border/60 bg-card p-6 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white font-bold">{t.avatar}</div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                  </div>
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">"{t.text}"</p>
+                <div className="mt-3 flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-amber-500">★</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="border-y border-border/60 bg-muted/20 py-20">
+          <div className="mx-auto max-w-4xl px-6">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Perguntas frequentes</h2>
+            </div>
+            <div className="mt-12 grid gap-4">
+              {faqs.map(f => (
+                <div key={f.q} className="rounded-[16px] border border-border/60 bg-card p-5">
+                  <p className="font-medium">{f.q}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

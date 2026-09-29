@@ -127,7 +127,7 @@ function QuestionCard({ question, onAnswer, showResult, onDelete, onEdit, mode =
             <button
               key={idx}
               type="button"
-              disabled={!!showResult}
+              disabled={isAnswered}
               onClick={() => handleSelect(idx)}
               className={cn(
                 "flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all",

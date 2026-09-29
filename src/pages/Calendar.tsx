@@ -26,7 +26,7 @@ export default function CalendarPage() {
  }
  
  const getDayData = (date: Date) => {
-  const dateStr = date.toISOString().split("T")[0];
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
   const planItems = plan?.items.filter(i => i.date === dateStr) || [];
   return { planItems, total: planItems.length };
  };

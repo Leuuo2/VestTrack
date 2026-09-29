@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Onboarding from "@/components/Onboarding";
 import ShortcutsHelp from "@/components/ShortcutsHelp";
+import SupabaseStatus from "@/components/SupabaseStatus";
 
 function MainLayout() {
  const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -50,6 +51,7 @@ function MainLayout() {
    </div>
    <Onboarding />
    <ShortcutsHelp />
+   <SupabaseStatus />
   </div>
  );
 }

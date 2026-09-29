@@ -36,7 +36,7 @@ export default function Onboarding() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const done = localStorage.getItem(STORAGE_KEY);
+    let done = null; try { done = localStorage.getItem(STORAGE_KEY); } catch {}
     if (!done) {
       const t = setTimeout(() => setOpen(true), 800);
       return () => clearTimeout(t);
@@ -44,7 +44,7 @@ export default function Onboarding() {
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem(STORAGE_KEY, "1");
+    try { localStorage.setItem(STORAGE_KEY, "1"); } catch {}
     setOpen(false);
   };
 
