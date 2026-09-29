@@ -18,7 +18,6 @@ const Focus = lazy(() => import("./pages/Focus"));
 const CalendarPage = lazy(() => import("./pages/Calendar"));
 const WeakTopics = lazy(() => import("./pages/WeakTopics"));
 const Summaries = lazy(() => import("./pages/Summaries"));
-const Tutor = lazy(() => import("./pages/Tutor"));
 const Goals = lazy(() => import("./pages/Goals"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 
@@ -61,7 +60,6 @@ const router = createBrowserRouter([
       { path: "achievements", element: withSuspense(Achievements) },
       { path: "weak-topics", element: withSuspense(WeakTopics) },
       { path: "summaries", element: withSuspense(Summaries) },
-      { path: "tutor", element: withSuspense(Tutor) },
       { path: "goals", element: withSuspense(Goals) },
       { path: "analytics", element: withSuspense(Analytics) },
       { path: "profile", element: withSuspense(Profile) },

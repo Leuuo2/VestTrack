@@ -12,7 +12,6 @@ import {
   Trophy,
   AlertTriangle,
   Map,
-  Bot,
   StickyNote,
   Target,
   BarChart3,
@@ -75,11 +74,6 @@ function Sidebar({ isOpen, onItemClick }: SidebarProps) {
       text: "Resumos",
       to: "/app/summaries",
       icon: StickyNote,
-    },
-    {
-      text: "Tutor IA",
-      to: "/app/tutor",
-      icon: Bot,
     },
     {
       text: "Metas",

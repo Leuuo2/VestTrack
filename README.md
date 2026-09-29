@@ -18,7 +18,6 @@ VestTrack é uma plataforma premium para organizar seus estudos pro vestibular. 
 - **🃏 Flashcards & Resumos** — Revisão espaçada com SRS
 - **🎯 Metas & Streaks** — Sequência de estudos, metas diárias/semanais/mensais, XP e níveis
 - **📅 Planner & Calendário** — Planeje por data, veja heatmap 90 dias
-- **🤖 Tutor IA** — Dúvidas por matéria com contexto dos seus tópicos
 - **⌨️ Atalhos** — 1-4 pra selecionar, Enter verifica, Esc limpa, ? mostra ajuda
 - **💾 Offline-first** — Funciona 100% sem login, salva no navegador. Nuvem opcional com Supabase
 
