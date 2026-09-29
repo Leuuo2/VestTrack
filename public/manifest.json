@@ -1,0 +1,17 @@
+{
+  "name": "VestTrack",
+  "short_name": "VestTrack",
+  "description": "Organize seus estudos pro vestibular",
+  "start_url": "/app",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

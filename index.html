@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="description" content="VestTrack — organize seus estudos pro vestibular. 10 matérias, 500 questões, flashcards, resumos, tutor IA, metas e analytics." />
+    <meta name="keywords" content="vestibular, enem, estudos, organização, questões, flashcards, vesttrack" />
+    <meta property="og:title" content="VestTrack — Organize seus estudos" />
+    <meta property="og:description" content="10 matérias, 500 questões, flashcards, resumos, tutor IA e analytics." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/favicon.svg" />
+    <title>VestTrack — Organize seus estudos</title>
+    <link rel="manifest" href="/manifest.json" />
+  </head>
+  <body>
+    <script>
+      try {
+        var t = localStorage.getItem("vesttrack:theme");
+        if (t === "dark" || (!t && matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
