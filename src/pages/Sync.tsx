@@ -127,11 +127,28 @@ function Sync() {
       <div className="mt-6">
         {!cloudIsConfigured() ? (
           <Card premium title="Nuvem ainda não configurada">
-            <div className="mt-4 flex items-start gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/20 dark:text-amber-400"><CloudOff className="h-5 w-5" /></div>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                O app está rodando só com os dados locais. Para ativar a sincronização, defina <code className="rounded bg-muted px-1.5 py-0.5 text-xs">VITE_SUPABASE_URL</code> e <code className="rounded bg-muted px-1.5 py-0.5 text-xs">VITE_SUPABASE_ANON_KEY</code> no arquivo <code className="rounded bg-muted px-1.5 py-0.5 text-xs">.env</code> e recarregue.
-              </p>
+            <div className="mt-4 space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/20 dark:text-amber-400"><CloudOff className="h-5 w-5" /></div>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  O app está rodando só com os dados locais. Para ativar a sincronização, defina <code className="rounded bg-muted px-1.5 py-0.5 text-xs">VITE_SUPABASE_URL</code> e <code className="rounded bg-muted px-1.5 py-0.5 text-xs">VITE_SUPABASE_ANON_KEY</code> no arquivo <code className="rounded bg-muted px-1.5 py-0.5 text-xs">.env</code> e recarregue.
+                </p>
+              </div>
+              <div className="rounded-xl bg-amber-500/10 p-4 ring-1 ring-amber-500/20">
+                <p className="text-xs font-medium text-amber-700 dark:text-amber-300">Na Vercel, adicione nas Environment Variables:</p>
+                <ul className="mt-2 text-xs text-amber-600 dark:text-amber-400 list-disc pl-4 space-y-1">
+                  <li><code>VITE_SUPABASE_URL</code> = https://odioaqutldttsbbplaom.supabase.co</li>
+                  <li><code>VITE_SUPABASE_ANON_KEY</code> = sua anon key (eyJ...)</li>
+                  <li>Depois faça Redeploy (sem cache)</li>
+                  <li>Rode o <code>supabase-schema.sql</code> no SQL Editor do Supabase</li>
+                </ul>
+              </div>
+              <div className="rounded-xl bg-muted p-3 text-xs">
+                <p className="font-medium">Debug:</p>
+                <p className="mt-1 font-mono">URL: {import.meta.env.VITE_SUPABASE_URL ? "✓ definida" : "✗ faltando"}</p>
+                <p className="font-mono">KEY: {import.meta.env.VITE_SUPABASE_ANON_KEY ? "✓ definida" : "✗ faltando"}</p>
+                <p className="mt-2 text-muted-foreground">Se faltando na Vercel, o app funciona só local. Adicione nas env vars e redeploy.</p>
+              </div>
             </div>
           </Card>
         ) : user ? (
