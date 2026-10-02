@@ -151,3 +151,22 @@ create policy "Users can manage own flashcards" on flashcards_progress for all u
 
 drop policy if exists "Users can manage own summaries" on summaries;
 create policy "Users can manage own summaries" on summaries for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Analytics - page views (public insert, only admin can read)
+create table if not exists page_views (
+  id uuid primary key default gen_random_uuid(),
+  path text,
+  referrer text,
+  user_agent text,
+  timestamp timestamptz default now(),
+  session_id text
+);
+
+alter table page_views enable row level security;
+
+drop policy if exists "Anyone can insert page views" on page_views;
+create policy "Anyone can insert page views" on page_views for insert with check (true);
+
+drop policy if exists "Only authenticated can read page views" on page_views;
+create policy "Only authenticated can read page views" on page_views for select using (auth.role() = 'authenticated');
+

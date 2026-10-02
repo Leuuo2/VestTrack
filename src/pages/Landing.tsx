@@ -19,6 +19,8 @@ import {
   Clock,
   Award,
 } from "lucide-react";
+import { useEffect } from "react";
+import { trackPageView } from "@/lib/analytics";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -100,6 +102,10 @@ const faqs = [
 ];
 
 function Landing() {
+  useEffect(() => {
+    trackPageView("/");
+  }, []);
+
   return (
     <div className="relative overflow-x-clip bg-background">
       {/* Background glows */}

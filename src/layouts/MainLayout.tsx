@@ -5,9 +5,17 @@ import { useState } from "react";
 import Onboarding from "@/components/Onboarding";
 import ShortcutsHelp from "@/components/ShortcutsHelp";
 import SupabaseStatus from "@/components/SupabaseStatus";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { trackPageView } from "@/lib/analytics";
 
 function MainLayout() {
  const [sidebarOpen, setSidebarOpen] = useState(false);
+ const location = useLocation();
+
+ useEffect(() => {
+  trackPageView(location.pathname);
+ }, [location.pathname]);
 
  function toggleSidebar() {
   setSidebarOpen((currentState) => !currentState);
