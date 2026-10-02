@@ -12,6 +12,8 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const isAdmin = user?.email === "leonardopereira201423@gmail.com" || user?.email === "leonardo@vesttrack.dev";
+
   const load = async () => {
     setLoading(true);
     setError(null);
@@ -37,8 +39,21 @@ export default function Admin() {
         <Card className="p-6 text-center border-dashed">
           <Eye className="mx-auto h-8 w-8 text-muted-foreground/50" />
           <p className="mt-3 font-medium">Precisa estar logado</p>
-          <p className="mt-1 text-sm text-muted-foreground">Faça login em /app/sync pra ver visitas (só autenticados podem ler page_views)</p>
+          <p className="mt-1 text-sm text-muted-foreground">Faça login em /app/sync pra ver visitas (só admin pode ver)</p>
           <Button asChild size="sm" className="mt-4"><Link to="/app/sync">Ir pra Sync</Link></Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold flex items-center gap-2"><BarChart3 className="h-6 w-6 text-violet-600" /> Visitas do Site</h1>
+        <Card className="p-6 text-center border-amber-500/20 bg-amber-500/5">
+          <p className="font-medium text-amber-700 dark:text-amber-300">Acesso restrito</p>
+          <p className="mt-2 text-sm text-muted-foreground">Só o admin (leonardopereira201423@gmail.com) pode ver visitas. Logado como {user.email}</p>
+          <Button asChild size="sm" variant="outline" className="mt-4"><Link to="/app">Voltar pro app</Link></Button>
         </Card>
       </div>
     );
