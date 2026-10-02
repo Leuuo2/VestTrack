@@ -19,6 +19,7 @@ const CalendarPage = lazy(() => import("./pages/Calendar"));
 const WeakTopics = lazy(() => import("./pages/WeakTopics"));
 const Summaries = lazy(() => import("./pages/Summaries"));
 const Goals = lazy(() => import("./pages/Goals"));
+const Admin = lazy(() => import("./pages/Admin"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 
 function PageLoader() {
@@ -62,6 +63,7 @@ const router = createBrowserRouter([
       { path: "summaries", element: withSuspense(Summaries) },
       { path: "goals", element: withSuspense(Goals) },
       { path: "analytics", element: withSuspense(Analytics) },
+      { path: "admin", element: withSuspense(Admin) },
       { path: "profile", element: withSuspense(Profile) },
       { path: "sync", element: withSuspense(Sync) },
     ],

@@ -15,6 +15,7 @@ import {
   StickyNote,
   Target,
   BarChart3,
+  Eye,
 } from "lucide-react";
 import SidebarItem from "../layout/SidebarItem";
 
@@ -99,6 +100,11 @@ function Sidebar({ isOpen, onItemClick }: SidebarProps) {
       text: "Sincronizar",
       to: "/app/sync",
       icon: Cloud,
+    },
+    {
+      text: "Visitas",
+      to: "/app/admin",
+      icon: Eye,
     },
     {
       text: "Perfil",
