@@ -51,9 +51,9 @@ export async function getVisitStats() {
     
     const { data: views, error } = await supabase
       .from("page_views")
-      .select("path, timestamp")
+      .select("path, timestamp, session_id")
       .order("timestamp", { ascending: false })
-      .limit(1000);
+      .limit(2000);
     
     if (error) {
       console.error("[analytics] supabase error", error);
@@ -64,12 +64,34 @@ export async function getVisitStats() {
     const today = new Date().toISOString().slice(0, 10);
     const todayViews = views?.filter(v => v.timestamp.slice(0, 10) === today).length || 0;
     
+    // Unique visitors = distinct session_id
+    const uniqueSessions = new Set(views?.map(v => v.session_id) || []).size;
+    const todayUnique = new Set(views?.filter(v => v.timestamp.slice(0, 10) === today).map(v => v.session_id) || []).size;
+    
     const byPath: Record<string, number> = {};
     views?.forEach(v => {
       byPath[v.path] = (byPath[v.path] || 0) + 1;
     });
+
+    const byPathUnique: Record<string, number> = {};
+    const seenPerPath = new Map<string, Set<string>>();
+    views?.forEach(v => {
+      if (!seenPerPath.has(v.path)) seenPerPath.set(v.path, new Set());
+      seenPerPath.get(v.path)!.add(v.session_id);
+    });
+    seenPerPath.forEach((set, path) => {
+      byPathUnique[path] = set.size;
+    });
     
-    return { total, today: todayViews, byPath, recent: views?.slice(0, 20) || [] };
+    return { 
+      total, 
+      today: todayViews, 
+      unique: uniqueSessions,
+      todayUnique,
+      byPath, 
+      byPathUnique,
+      recent: views?.slice(0, 30) || [] 
+    };
   } catch (e: any) {
     console.error("[analytics] get stats error", e);
     throw e;
