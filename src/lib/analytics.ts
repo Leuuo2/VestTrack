@@ -37,16 +37,28 @@ function getSessionId() {
 
 // Get visit stats - for admin dashboard
 export async function getVisitStats() {
-  if (!isCloudConfigured || !supabase) return null;
+  if (!isCloudConfigured || !supabase) {
+    throw new Error("Supabase não configurado - VITE_SUPABASE_URL ou KEY faltando");
+  }
   
   try {
+    // First check if user is authenticated
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) throw new Error(`Session error: ${sessionError.message}`);
+    if (!session) throw new Error("Sem sessão - faça login novamente em /app/sync");
+    
+    console.log("[analytics] session user", session.user.email, session.user.role);
+    
     const { data: views, error } = await supabase
       .from("page_views")
       .select("path, timestamp")
       .order("timestamp", { ascending: false })
       .limit(1000);
     
-    if (error) throw error;
+    if (error) {
+      console.error("[analytics] supabase error", error);
+      throw new Error(`Supabase: ${error.message} (code: ${error.code}) - Rode o SQL do page_views e verifique RLS`);
+    }
     
     const total = views?.length || 0;
     const today = new Date().toISOString().slice(0, 10);
@@ -58,8 +70,8 @@ export async function getVisitStats() {
     });
     
     return { total, today: todayViews, byPath, recent: views?.slice(0, 20) || [] };
-  } catch (e) {
-    console.debug("[analytics] get stats error", e);
-    return null;
+  } catch (e: any) {
+    console.error("[analytics] get stats error", e);
+    throw e;
   }
 }

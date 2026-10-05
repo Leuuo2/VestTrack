@@ -21,9 +21,9 @@ export default function Admin() {
     try {
       const s = await getVisitStats();
       setStats(s);
-      if (!s) setError("Sem dados ou sem permissão. Faça login e rode o SQL do page_views.");
     } catch (e: any) {
       setError(e.message || "Erro ao carregar");
+      console.error(e);
     } finally {
       setLoading(false);
     }
