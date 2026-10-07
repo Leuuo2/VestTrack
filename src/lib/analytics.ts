@@ -11,6 +11,8 @@ export async function trackPageView(path: string) {
       user_agent: navigator.userAgent,
       timestamp: new Date().toISOString(),
       session_id: getSessionId(),
+      visitor_id: getVisitorId(),
+      user_id: await getUserId(),
     };
     
     // Don't await - fire and forget
@@ -35,6 +37,29 @@ function getSessionId() {
   }
 }
 
+function getVisitorId() {
+  try {
+    let vid = localStorage.getItem("vesttrack_vid");
+    if (!vid) {
+      vid = "v_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem("vesttrack_vid", vid);
+    }
+    return vid;
+  } catch {
+    return "unknown";
+  }
+}
+
+async function getUserId() {
+  try {
+    if (!supabase) return null;
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.user?.id || null;
+  } catch {
+    return null;
+  }
+}
+
 // Get visit stats - for admin dashboard
 export async function getVisitStats() {
   if (!isCloudConfigured || !supabase) {
@@ -47,50 +72,64 @@ export async function getVisitStats() {
     if (sessionError) throw new Error(`Session error: ${sessionError.message}`);
     if (!session) throw new Error("Sem sessão - faça login novamente em /app/sync");
     
-    console.log("[analytics] session user", session.user.email, session.user.role);
-    
     const { data: views, error } = await supabase
       .from("page_views")
-      .select("path, timestamp, session_id")
+      .select("path, timestamp, session_id, visitor_id, user_id")
       .order("timestamp", { ascending: false })
-      .limit(2000);
+      .limit(5000);
     
     if (error) {
-      console.error("[analytics] supabase error", error);
-      throw new Error(`Supabase: ${error.message} (code: ${error.code}) - Rode o SQL do page_views e verifique RLS`);
+      throw new Error(`Supabase: ${error.message} (code: ${error.code})`);
     }
     
     const total = views?.length || 0;
     const today = new Date().toISOString().slice(0, 10);
     const todayViews = views?.filter(v => v.timestamp.slice(0, 10) === today).length || 0;
     
-    // Unique visitors = distinct session_id
+    // Pessoas reais = distinct visitor_id (persiste mesmo fechando aba) ou user_id se logado
+    const uniqueVisitors = new Set(views?.map(v => v.visitor_id || v.session_id) || []).size;
+    const uniqueUsers = new Set(views?.filter(v => v.user_id).map(v => v.user_id) || []).size;
     const uniqueSessions = new Set(views?.map(v => v.session_id) || []).size;
-    const todayUnique = new Set(views?.filter(v => v.timestamp.slice(0, 10) === today).map(v => v.session_id) || []).size;
+    
+    const todayUniqueVisitors = new Set(views?.filter(v => v.timestamp.slice(0, 10) === today).map(v => v.visitor_id) || []).size;
+    const todayUniqueSessions = new Set(views?.filter(v => v.timestamp.slice(0, 10) === today).map(v => v.session_id) || []).size;
     
     const byPath: Record<string, number> = {};
+    const byPathUniqueVisitors: Record<string, number> = {};
+    const byPathUniqueSessions: Record<string, number> = {};
+    
+    const seenVisitorsPerPath = new Map<string, Set<string>>();
+    const seenSessionsPerPath = new Map<string, Set<string>>();
+    
     views?.forEach(v => {
       byPath[v.path] = (byPath[v.path] || 0) + 1;
+      
+      if (!seenVisitorsPerPath.has(v.path)) seenVisitorsPerPath.set(v.path, new Set());
+      seenVisitorsPerPath.get(v.path)!.add(v.visitor_id || v.session_id);
+      
+      if (!seenSessionsPerPath.has(v.path)) seenSessionsPerPath.set(v.path, new Set());
+      seenSessionsPerPath.get(v.path)!.add(v.session_id);
     });
-
-    const byPathUnique: Record<string, number> = {};
-    const seenPerPath = new Map<string, Set<string>>();
-    views?.forEach(v => {
-      if (!seenPerPath.has(v.path)) seenPerPath.set(v.path, new Set());
-      seenPerPath.get(v.path)!.add(v.session_id);
+    
+    seenVisitorsPerPath.forEach((set, path) => {
+      byPathUniqueVisitors[path] = set.size;
     });
-    seenPerPath.forEach((set, path) => {
-      byPathUnique[path] = set.size;
+    seenSessionsPerPath.forEach((set, path) => {
+      byPathUniqueSessions[path] = set.size;
     });
     
     return { 
       total, 
       today: todayViews, 
-      unique: uniqueSessions,
-      todayUnique,
+      uniqueVisitors,
+      uniqueUsers,
+      uniqueSessions,
+      todayUniqueVisitors,
+      todayUniqueSessions,
       byPath, 
-      byPathUnique,
-      recent: views?.slice(0, 30) || [] 
+      byPathUniqueVisitors,
+      byPathUniqueSessions,
+      recent: views?.slice(0, 50) || [] 
     };
   } catch (e: any) {
     console.error("[analytics] get stats error", e);

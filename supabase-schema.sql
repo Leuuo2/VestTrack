@@ -159,7 +159,9 @@ create table if not exists page_views (
   referrer text,
   user_agent text,
   timestamp timestamptz default now(),
-  session_id text
+  session_id text,
+  visitor_id text,
+  user_id uuid
 );
 
 alter table page_views enable row level security;
@@ -169,4 +171,10 @@ create policy "Anyone can insert page views" on page_views for insert with check
 
 drop policy if exists "Only authenticated can read page views" on page_views;
 create policy "Only authenticated can read page views" on page_views for select using (auth.role() = 'authenticated');
+
+-- Add columns if table already exists
+alter table page_views add column if not exists visitor_id text;
+alter table page_views add column if not exists user_id uuid;
+alter table page_views add column if not exists referrer text;
+alter table page_views add column if not exists user_agent text;
 

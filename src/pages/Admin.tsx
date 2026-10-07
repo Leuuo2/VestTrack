@@ -93,9 +93,9 @@ create policy "Only auth can read" on page_views for select using (auth.role() =
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <Card className="p-4 bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white border-0">
-              <div className="flex items-center gap-2 opacity-80"><Users className="h-4 w-4" /><span className="text-xs">Pessoas únicas</span></div>
-              <p className="mt-1 text-2xl font-bold">{stats.unique}</p>
-              <p className="text-[11px] opacity-80">{stats.todayUnique} hoje • por session_id</p>
+              <div className="flex items-center gap-2 opacity-80"><Users className="h-4 w-4" /><span className="text-xs">Pessoas reais</span></div>
+              <p className="mt-1 text-2xl font-bold">{stats.uniqueVisitors}</p>
+              <p className="text-[11px] opacity-80">{stats.todayUniqueVisitors} hoje • localStorage (persiste)</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-2 text-muted-foreground"><Eye className="h-4 w-4" /><span className="text-xs">Total cliques</span></div>
@@ -103,30 +103,41 @@ create policy "Only auth can read" on page_views for select using (auth.role() =
               <p className="text-[11px] text-muted-foreground">{stats.today} hoje • page views</p>
             </Card>
             <Card className="p-4">
-              <div className="flex items-center gap-2 text-muted-foreground"><Globe className="h-4 w-4" /><span className="text-xs">Páginas únicas</span></div>
-              <p className="mt-1 text-2xl font-bold">{Object.keys(stats.byPath).length}</p>
-              <p className="text-[11px] text-muted-foreground">rotas diferentes</p>
+              <div className="flex items-center gap-2 text-muted-foreground"><Users className="h-4 w-4" /><span className="text-xs">Sessões</span></div>
+              <p className="mt-1 text-2xl font-bold">{stats.uniqueSessions}</p>
+              <p className="text-[11px] text-muted-foreground">{stats.todayUniqueSessions} hoje • por aba (fecha= nova)</p>
             </Card>
             <Card className="p-4">
-              <div className="flex items-center gap-2 text-muted-foreground"><TrendingUp className="h-4 w-4" /><span className="text-xs">Top página</span></div>
-              <p className="mt-1 text-sm font-bold truncate">{Object.entries(stats.byPath).sort((a,b)=>b[1]-a[1])[0]?.[0] || "-"}</p>
-              <p className="text-[11px] text-muted-foreground">{Object.entries(stats.byPathUnique).sort((a,b)=>b[1]-a[1])[0]?.[1] || 0} pessoas • {Object.entries(stats.byPath).sort((a,b)=>b[1]-a[1])[0]?.[1] || 0} cliques</p>
+              <div className="flex items-center gap-2 text-muted-foreground"><Globe className="h-4 w-4" /><span className="text-xs">Logados</span></div>
+              <p className="mt-1 text-2xl font-bold">{stats.uniqueUsers}</p>
+              <p className="text-[11px] text-muted-foreground">usuários com conta</p>
             </Card>
           </div>
 
+          <Card className="p-4 bg-violet-500/5 border-violet-500/20">
+            <p className="text-sm font-medium">💡 Como contamos pessoas?</p>
+            <ul className="mt-2 text-xs text-muted-foreground space-y-1 list-disc pl-4">
+              <li><strong>Pessoas reais (recomendado):</strong> por visitor_id no localStorage — persiste mesmo fechando aba, só muda se limpar cache ou trocar navegador. Mais preciso!</li>
+              <li><strong>Sessões:</strong> por session_id no sessionStorage — cada aba nova = nova sessão. Se fechar aba e abrir outra, conta +1 (menos preciso)</li>
+              <li><strong>Todos sites são assim:</strong> Google Analytics, Vercel Analytics, etc usam cookie/localStorage + IP + fingerprint. 100% preciso só com login, mas visitor_id já é bem preciso</li>
+              <li><strong>Logados:</strong> se usuário tem conta, conta por user_id — 100% preciso pra logados</li>
+            </ul>
+          </Card>
+
           <Card className="p-4 md:p-6">
-            <h3 className="font-medium text-sm flex items-center gap-2"><TrendingUp className="h-4 w-4 text-violet-600" /> Pessoas únicas por página (não cliques)</h3>
-            <p className="mt-1 text-xs text-muted-foreground">Conta por session_id — mesma pessoa navegando várias vezes conta 1x por página</p>
+            <h3 className="font-medium text-sm flex items-center gap-2"><TrendingUp className="h-4 w-4 text-violet-600" /> Pessoas reais por página (não cliques)</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Por visitor_id (localStorage) — fecha aba e abre outra NÃO conta nova</p>
             <div className="mt-4 space-y-2">
-              {Object.entries(stats.byPathUnique).sort((a,b)=>b[1]-a[1]).map(([path, uniqueCount]) => {
+              {Object.entries(stats.byPathUniqueVisitors).sort((a,b)=>b[1]-a[1]).map(([path, uniqueCount]) => {
                 const totalClicks = stats.byPath[path] || 0;
+                const sessions = stats.byPathUniqueSessions[path] || 0;
                 return (
                   <div key={path} className="flex items-center gap-3 rounded-xl bg-muted/50 px-3 py-2.5">
                     <span className="flex-1 truncate font-mono text-sm">{path}</span>
-                    <span className="text-xs text-muted-foreground">{totalClicks} cliques</span>
+                    <span className="text-xs text-muted-foreground hidden sm:inline">{totalClicks} cliques • {sessions} sessões</span>
                     <span className="font-bold">{uniqueCount} pessoas</span>
                     <div className="h-2 w-20 overflow-hidden rounded-full bg-muted">
-                      <div className="h-full bg-violet-600" style={{ width: `${(uniqueCount / Math.max(...Object.values(stats.byPathUnique))) * 100}%` }} />
+                      <div className="h-full bg-violet-600" style={{ width: `${(uniqueCount / Math.max(...Object.values(stats.byPathUniqueVisitors), 1)) * 100}%` }} />
                     </div>
                   </div>
                 );
@@ -135,12 +146,12 @@ create policy "Only auth can read" on page_views for select using (auth.role() =
           </Card>
 
           <Card className="p-4 md:p-6">
-            <h3 className="font-medium text-sm">Últimas 30 visitas (com session)</h3>
-            <div className="mt-4 space-y-2 max-h-[400px] overflow-auto">
+            <h3 className="font-medium text-sm">Últimas 50 visitas (com IDs)</h3>
+            <div className="mt-4 space-y-2 max-h-[500px] overflow-auto">
               {stats.recent.map((v: any) => (
-                <div key={v.path + v.timestamp + v.session_id} className="flex items-center justify-between gap-3 rounded-xl border border-border/50 px-3 py-2 text-xs">
-                  <span className="font-mono truncate">{v.path}</span>
-                  <span className="text-[10px] text-muted-foreground font-mono truncate max-w-[80px]">{v.session_id.slice(0,8)}...</span>
+                <div key={v.path + v.timestamp + v.session_id} className="flex items-center justify-between gap-2 rounded-xl border border-border/50 px-3 py-2 text-[11px]">
+                  <span className="font-mono truncate flex-1">{v.path}</span>
+                  <span className="text-[10px] text-muted-foreground font-mono hidden md:inline">v:{v.visitor_id?.slice(0,6)} s:{v.session_id?.slice(0,6)} {v.user_id ? "👤" : "👻"}</span>
                   <span className="text-muted-foreground shrink-0">{new Date(v.timestamp).toLocaleString("pt-BR")}</span>
                 </div>
               ))}
